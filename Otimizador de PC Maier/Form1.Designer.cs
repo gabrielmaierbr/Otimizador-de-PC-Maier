@@ -273,7 +273,7 @@
             // 
             // btnReboot
             // 
-            this.btnReboot.Location = new System.Drawing.Point(571, 401);
+            this.btnReboot.Location = new System.Drawing.Point(631, 401);
             this.btnReboot.Name = "btnReboot";
             this.btnReboot.Size = new System.Drawing.Size(196, 50);
             this.btnReboot.TabIndex = 15;
@@ -293,7 +293,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(314, 400);
+            this.lblStatus.Location = new System.Drawing.Point(301, 400);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(44, 16);
             this.lblStatus.TabIndex = 17;
@@ -301,9 +301,9 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(317, 422);
+            this.progressBar.Location = new System.Drawing.Point(304, 422);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(230, 29);
+            this.progressBar.Size = new System.Drawing.Size(308, 29);
             this.progressBar.TabIndex = 18;
             // 
             // Form1
