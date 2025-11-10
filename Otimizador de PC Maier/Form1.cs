@@ -26,7 +26,6 @@ namespace Otimizador_de_PC_Maier
 
         private void btnInstallProg_Click(object sender, EventArgs e)
         {
-            // Desabilita o botão durante a instalação
             btnInstallProg.Enabled = false;
 
             Task.Run(() => InstallPrograms());
@@ -52,7 +51,6 @@ namespace Otimizador_de_PC_Maier
                 "notepadplusplus"
             };
 
-            // Inicializa a progress bar
             UpdateProgressBar(0, "Verificando Chocolatey...");
 
             if (!IsChocolateyInstalled())
@@ -60,10 +58,8 @@ namespace Otimizador_de_PC_Maier
                 UpdateProgressBar(0, "Instalando Chocolatey...");
                 InstallChocolatey();
 
-                // Aguarda um pouco para garantir que o Chocolatey foi instalado
                 await Task.Delay(3000);
 
-                // Ativa o recurso para não pedir confirmação
                 UpdateProgressBar(10, "Configurando Chocolatey...");
                 EnableChocolateyAutoConfirm();
             }
@@ -72,25 +68,21 @@ namespace Otimizador_de_PC_Maier
                 UpdateProgressBar(10, "Chocolatey já está instalado");
             }
 
-            // Instala cada programa com progresso
             for (int i = 0; i < programs.Length; i++)
             {
                 string program = programs[i];
-                int progress = 10 + (i * 90) / programs.Length; // 10% já usados para instalação do Chocolatey
+                int progress = 10 + (i * 90) / programs.Length;
 
                 UpdateProgressBar(progress, $"Instalando {program}... ({i + 1}/{programs.Length})");
 
                 await InstallProgram(program);
 
-                // Atualiza progresso após cada instalação
                 progress = 10 + ((i + 1) * 90) / programs.Length;
                 UpdateProgressBar(progress, $"{program} instalado! ({i + 1}/{programs.Length})");
             }
 
-            // Completa a progress bar
-            UpdateProgressBar(100, "Todos os programas foram instalados!");
+            UpdateProgressBar(100, "Todos os programas foram instalados");
 
-            // Reabilita o botão e reseta a progress bar
             btnInstallProg.Invoke(new Action(() =>
             {
                 btnInstallProg.Enabled = true;
@@ -101,8 +93,6 @@ namespace Otimizador_de_PC_Maier
             MessageBox.Show("Todos os programas foram instalados", "Concluído",
                            MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-        // Método para atualizar a Progress Bar de forma thread-safe
         private void UpdateProgressBar(int value, string status)
         {
             if (progressBar.InvokeRequired || lblStatus.InvokeRequired)
@@ -114,11 +104,8 @@ namespace Otimizador_de_PC_Maier
             progressBar.Value = value;
             lblStatus.Text = status;
 
-            // Atualiza a interface
             Application.DoEvents();
         }
-
-        // Método para ativar a confirmação automática do Chocolatey
         private void EnableChocolateyAutoConfirm()
         {
             string command = "choco feature enable -n allowGlobalConfirmation";
@@ -165,7 +152,6 @@ namespace Otimizador_de_PC_Maier
         {
             return Task.Run(() =>
             {
-                // Não precisa mais do -y pois o allowGlobalConfirmation já ativa a confirmação automática
                 string command = $"choco install {programName} --force";
                 ExecutePowerShellCommand(command);
             });
