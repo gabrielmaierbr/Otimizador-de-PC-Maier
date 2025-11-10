@@ -26,17 +26,194 @@ namespace Otimizador_de_PC_Maier
 
         private void btnInstallProg_Click(object sender, EventArgs e)
         {
-            if (File.Exists("files/programas/ninite.exe"))
+            // Desabilita o botão durante a instalação
+            btnInstallProg.Enabled = false;
+
+            Task.Run(() => InstallPrograms());
+        }
+
+        private async void InstallPrograms()
+        {
+            string[] programs = {
+                "vcredist2005",
+                "vcredist2008",
+                "vcredist2010",
+                "vcredist2012",
+                "vcredist2013",
+                "vcredist140",
+                "firefox",
+                "discord",
+                "steam",
+                "spotify",
+                "directx",
+                "msiafterburner",
+                "vlc",
+                "imageglass",
+                "notepadplusplus"
+            };
+
+            // Inicializa a progress bar
+            UpdateProgressBar(0, "Verificando Chocolatey...");
+
+            if (!IsChocolateyInstalled())
             {
-                System.Diagnostics.Process process = new Process();
-                process.StartInfo.FileName = "ninite.exe";
-                process.StartInfo.WorkingDirectory = "files/programas";
-                process.Start();
-                process.WaitForExit();
+                UpdateProgressBar(0, "Instalando Chocolatey...");
+                InstallChocolatey();
+
+                // Aguarda um pouco para garantir que o Chocolatey foi instalado
+                await Task.Delay(3000);
+
+                // Ativa o recurso para não pedir confirmação
+                UpdateProgressBar(10, "Configurando Chocolatey...");
+                EnableChocolateyAutoConfirm();
             }
             else
             {
-                MessageBox.Show("Arquivo não encontrado", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                UpdateProgressBar(10, "Chocolatey já está instalado");
+            }
+
+            // Instala cada programa com progresso
+            for (int i = 0; i < programs.Length; i++)
+            {
+                string program = programs[i];
+                int progress = 10 + (i * 90) / programs.Length; // 10% já usados para instalação do Chocolatey
+
+                UpdateProgressBar(progress, $"Instalando {program}... ({i + 1}/{programs.Length})");
+
+                await InstallProgram(program);
+
+                // Atualiza progresso após cada instalação
+                progress = 10 + ((i + 1) * 90) / programs.Length;
+                UpdateProgressBar(progress, $"{program} instalado! ({i + 1}/{programs.Length})");
+            }
+
+            // Completa a progress bar
+            UpdateProgressBar(100, "Todos os programas foram instalados!");
+
+            // Reabilita o botão e reseta a progress bar
+            btnInstallProg.Invoke(new Action(() =>
+            {
+                btnInstallProg.Enabled = true;
+                progressBar.Value = 0;
+                lblStatus.Text = "Pronto para instalar";
+            }));
+
+            MessageBox.Show("Todos os programas foram instalados", "Concluído",
+                           MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        // Método para atualizar a Progress Bar de forma thread-safe
+        private void UpdateProgressBar(int value, string status)
+        {
+            if (progressBar.InvokeRequired || lblStatus.InvokeRequired)
+            {
+                progressBar.Invoke(new Action<int, string>(UpdateProgressBar), value, status);
+                return;
+            }
+
+            progressBar.Value = value;
+            lblStatus.Text = status;
+
+            // Atualiza a interface
+            Application.DoEvents();
+        }
+
+        // Método para ativar a confirmação automática do Chocolatey
+        private void EnableChocolateyAutoConfirm()
+        {
+            string command = "choco feature enable -n allowGlobalConfirmation";
+            ExecutePowerShellCommand(command);
+        }
+
+        private bool IsChocolateyInstalled()
+        {
+            try
+            {
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "choco",
+                        Arguments = "--version",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        CreateNoWindow = true
+                    }
+                };
+
+                process.Start();
+                process.WaitForExit();
+                return process.ExitCode == 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private void InstallChocolatey()
+        {
+            string powerShellCommand = "Set-ExecutionPolicy Bypass -Scope Process -Force; " +
+                                     "[System.Net.ServicePointManager]::SecurityProtocol = " +
+                                     "[System.Net.ServicePointManager]::SecurityProtocol -bor 3072; " +
+                                     "iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))";
+
+            ExecutePowerShellCommand(powerShellCommand);
+        }
+
+        private Task InstallProgram(string programName)
+        {
+            return Task.Run(() =>
+            {
+                // Não precisa mais do -y pois o allowGlobalConfirmation já ativa a confirmação automática
+                string command = $"choco install {programName} --force";
+                ExecutePowerShellCommand(command);
+            });
+        }
+
+        private void ExecutePowerShellCommand(string command)
+        {
+            try
+            {
+                var processStartInfo = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{command}\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                using (var process = new Process())
+                {
+                    process.StartInfo = processStartInfo;
+
+                    process.OutputDataReceived += (s, e) =>
+                    {
+                        if (!string.IsNullOrEmpty(e.Data))
+                        {
+                            System.Diagnostics.Debug.WriteLine(e.Data);
+                        }
+                    };
+
+                    process.ErrorDataReceived += (s, e) =>
+                    {
+                        if (!string.IsNullOrEmpty(e.Data))
+                        {
+                            System.Diagnostics.Debug.WriteLine($"ERRO: {e.Data}");
+                        }
+                    };
+
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+                    process.WaitForExit();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exceção: {ex.Message}");
             }
         }
 

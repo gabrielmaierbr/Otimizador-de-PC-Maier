@@ -40,6 +40,8 @@
             this.btnNVIDIACleanstall = new System.Windows.Forms.Button();
             this.btnLinkDriverNVIDIA = new System.Windows.Forms.Button();
             this.windowsGB = new System.Windows.Forms.GroupBox();
+            this.btnExplorerFolderType = new System.Windows.Forms.Button();
+            this.btnDisableSuperFetch = new System.Windows.Forms.Button();
             this.btnPowerPlanSettings = new System.Windows.Forms.Button();
             this.btnResponsiveness = new System.Windows.Forms.Button();
             this.btnNetworkThrottling = new System.Windows.Forms.Button();
@@ -48,9 +50,9 @@
             this.btnMassGrave = new System.Windows.Forms.Button();
             this.btnUltimatePerformance = new System.Windows.Forms.Button();
             this.btnReboot = new System.Windows.Forms.Button();
-            this.btnDisableSuperFetch = new System.Windows.Forms.Button();
-            this.btnExplorerFolderType = new System.Windows.Forms.Button();
             this.labelSign = new System.Windows.Forms.Label();
+            this.lblStatus = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.postFormatGB.SuspendLayout();
             this.AMDGB.SuspendLayout();
             this.NVIDIAGB.SuspendLayout();
@@ -60,7 +62,7 @@
             // postFormatGB
             // 
             this.postFormatGB.Controls.Add(this.btnInstallProg);
-            this.postFormatGB.Location = new System.Drawing.Point(13, 11);
+            this.postFormatGB.Location = new System.Drawing.Point(8, 6);
             this.postFormatGB.Name = "postFormatGB";
             this.postFormatGB.Size = new System.Drawing.Size(264, 108);
             this.postFormatGB.TabIndex = 0;
@@ -82,7 +84,7 @@
             this.AMDGB.Controls.Add(this.btnAMDSlimmer);
             this.AMDGB.Controls.Add(this.btnAMDDisableDXNAVI);
             this.AMDGB.Controls.Add(this.btnLinkDriverAMD);
-            this.AMDGB.Location = new System.Drawing.Point(13, 125);
+            this.AMDGB.Location = new System.Drawing.Point(8, 120);
             this.AMDGB.Name = "AMDGB";
             this.AMDGB.Size = new System.Drawing.Size(264, 216);
             this.AMDGB.TabIndex = 1;
@@ -133,7 +135,7 @@
             // 
             this.NVIDIAGB.Controls.Add(this.btnNVIDIACleanstall);
             this.NVIDIAGB.Controls.Add(this.btnLinkDriverNVIDIA);
-            this.NVIDIAGB.Location = new System.Drawing.Point(13, 347);
+            this.NVIDIAGB.Location = new System.Drawing.Point(8, 342);
             this.NVIDIAGB.Name = "NVIDIAGB";
             this.NVIDIAGB.Size = new System.Drawing.Size(265, 155);
             this.NVIDIAGB.TabIndex = 2;
@@ -172,12 +174,32 @@
             this.windowsGB.Controls.Add(this.btnReduceAudioLatency);
             this.windowsGB.Controls.Add(this.btnMassGrave);
             this.windowsGB.Controls.Add(this.btnUltimatePerformance);
-            this.windowsGB.Location = new System.Drawing.Point(283, 11);
+            this.windowsGB.Location = new System.Drawing.Point(278, 6);
             this.windowsGB.Name = "windowsGB";
             this.windowsGB.Size = new System.Drawing.Size(569, 330);
             this.windowsGB.TabIndex = 3;
             this.windowsGB.TabStop = false;
             this.windowsGB.Text = "Windows";
+            // 
+            // btnExplorerFolderType
+            // 
+            this.btnExplorerFolderType.Location = new System.Drawing.Point(275, 249);
+            this.btnExplorerFolderType.Name = "btnExplorerFolderType";
+            this.btnExplorerFolderType.Size = new System.Drawing.Size(230, 50);
+            this.btnExplorerFolderType.TabIndex = 16;
+            this.btnExplorerFolderType.Text = "Desativar Descoberta de Pastas";
+            this.btnExplorerFolderType.UseVisualStyleBackColor = true;
+            this.btnExplorerFolderType.Click += new System.EventHandler(this.btnExplorerFolderType_Click);
+            // 
+            // btnDisableSuperFetch
+            // 
+            this.btnDisableSuperFetch.Location = new System.Drawing.Point(275, 137);
+            this.btnDisableSuperFetch.Name = "btnDisableSuperFetch";
+            this.btnDisableSuperFetch.Size = new System.Drawing.Size(230, 50);
+            this.btnDisableSuperFetch.TabIndex = 15;
+            this.btnDisableSuperFetch.Text = "Desativar SuperFetch";
+            this.btnDisableSuperFetch.UseVisualStyleBackColor = true;
+            this.btnDisableSuperFetch.Click += new System.EventHandler(this.btnDisableSuperFetch_Click);
             // 
             // btnPowerPlanSettings
             // 
@@ -251,7 +273,7 @@
             // 
             // btnReboot
             // 
-            this.btnReboot.Location = new System.Drawing.Point(576, 406);
+            this.btnReboot.Location = new System.Drawing.Point(571, 401);
             this.btnReboot.Name = "btnReboot";
             this.btnReboot.Size = new System.Drawing.Size(196, 50);
             this.btnReboot.TabIndex = 15;
@@ -259,40 +281,38 @@
             this.btnReboot.UseVisualStyleBackColor = true;
             this.btnReboot.Click += new System.EventHandler(this.btnReboot_Click);
             // 
-            // btnDisableSuperFetch
-            // 
-            this.btnDisableSuperFetch.Location = new System.Drawing.Point(275, 137);
-            this.btnDisableSuperFetch.Name = "btnDisableSuperFetch";
-            this.btnDisableSuperFetch.Size = new System.Drawing.Size(230, 50);
-            this.btnDisableSuperFetch.TabIndex = 15;
-            this.btnDisableSuperFetch.Text = "Desativar SuperFetch";
-            this.btnDisableSuperFetch.UseVisualStyleBackColor = true;
-            this.btnDisableSuperFetch.Click += new System.EventHandler(this.btnDisableSuperFetch_Click);
-            // 
-            // btnExplorerFolderType
-            // 
-            this.btnExplorerFolderType.Location = new System.Drawing.Point(275, 249);
-            this.btnExplorerFolderType.Name = "btnExplorerFolderType";
-            this.btnExplorerFolderType.Size = new System.Drawing.Size(230, 50);
-            this.btnExplorerFolderType.TabIndex = 16;
-            this.btnExplorerFolderType.Text = "Desativar Descoberta de Pastas";
-            this.btnExplorerFolderType.UseVisualStyleBackColor = true;
-            this.btnExplorerFolderType.Click += new System.EventHandler(this.btnExplorerFolderType_Click);
-            // 
             // labelSign
             // 
             this.labelSign.AutoSize = true;
-            this.labelSign.Location = new System.Drawing.Point(776, 493);
+            this.labelSign.Location = new System.Drawing.Point(776, 492);
             this.labelSign.Name = "labelSign";
             this.labelSign.Size = new System.Drawing.Size(88, 16);
             this.labelSign.TabIndex = 16;
             this.labelSign.Text = "Gabriel Maier";
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(314, 400);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(44, 16);
+            this.lblStatus.TabIndex = 17;
+            this.lblStatus.Text = "Status";
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(317, 422);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(230, 29);
+            this.progressBar.TabIndex = 18;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(867, 511);
+            this.Controls.Add(this.progressBar);
+            this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.labelSign);
             this.Controls.Add(this.btnReboot);
             this.Controls.Add(this.windowsGB);
@@ -339,6 +359,8 @@
         private System.Windows.Forms.Button btnDisableSuperFetch;
         private System.Windows.Forms.Button btnExplorerFolderType;
         private System.Windows.Forms.Label labelSign;
+        private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }
 
